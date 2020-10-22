@@ -1,12 +1,10 @@
 import * as React from 'react';
 import WebView from 'react-native-webview';
-import { View, Text, Alert } from 'react-native';
+import { View, Text, Alert, StyleSheet } from 'react-native';
 
-
-const url = 'https://smtmalltest.smgtech.net/';
-// const url = '//m.mtime.cn/#!/onlineticket/615072603/';
-// const url = 'https://1111.tmall.com/';
-// const url = 'https://www.2345.com/?kmupiao';
+const uri = 'https://smtmalltest.smgtech.net/';
+// const uri = 'https://1111.tmall.com/';
+// const uri = 'https://m.mtime.cn/#!/onlineticket/615103976/';
 
 const JsCode = (window, document) => {
   // 在这里就可获取或操用页面中的DOM啦！
@@ -34,21 +32,30 @@ const Find = () => {
 
   const style = `display: flex; justify-content: center; align-items: center; width: 100vw; height: 100vh; color: purple; font-size: 4rem;`;
   return (
+    <View style={css.page}>
+      <WebView
+        originWhitelist={['*']}
 
-    <WebView
-      originWhitelist={['*']}
+        // source={{ html: `<h1 style="${style}">我是一个静态的HTML代码</h1>` }}
+        source={{ uri }}
 
-      // source={{ html: `<h1 style="${style}">我是一个静态的HTML代码</h1>` }}
-      source={{ url }}
+        scalesPageToFit={true}
 
-      // injectedJavaScript 注入js脚本(转为字符串)
-      injectedJavaScript={`(${JsCode.toString()})(window, document)`}
+        // injectedJavaScript 注入js脚本(转为字符串)
+        injectedJavaScript={`(${JsCode.toString()})(window, document)`}
 
-      onMessage={(e) => {
-        Alert.alert('您选中的座位是：' + e.nativeEvent.data);
-      }}
-    />
+        onMessage={(e) => {
+          Alert.alert('您选中的座位是：' + e.nativeEvent.data);
+        }}
+      />
+    </View>
   );
-}
+};
+
+const css = StyleSheet.create({
+  page: {
+    width: '100%', height: '100%', overflow: 'hidden'
+  }
+})
 
 export default Find;
